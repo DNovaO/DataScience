@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Ignorar todos los archivos .log
 *.log
 
@@ -9,3 +10,6 @@ config/database.yml
 
 # Ignorar carpetas generadas automáticamente
 /dist
+=======
+/venv/
+>>>>>>> 9d5f4203c77525dc4f60c9df43223d5587cc7423
