@@ -9,3 +9,9 @@ config/database.yml
 
 # Ignorar carpetas generadas automáticamente
 /dist
+
+/venv/
+
+/.vnv/
+
+
