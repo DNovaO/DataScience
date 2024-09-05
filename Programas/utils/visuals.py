@@ -20,6 +20,7 @@ def check_output_dir():
         os.makedirs(output_dir)
     return output_dir
 
+"""
 # Crear la funcion con seaborn para generar un histograma por pares de columna
 def save_histogram(dataframe, column):
     output_dir = check_output_dir()
@@ -68,3 +69,26 @@ def save_all_correlations_one_image(dataframe):
     plt.savefig(f"{output_dir}/ALL_histograms.png")
     plt.close()
     pass
+"""
+# SEGUNDA PARTE --> INEGI
+# Crear la funcion con seaborn para generar un heatmap
+# Crear la función con seaborn para generar un heatmap
+def save_heatmap(dataframe, x_col, y_col, z_col):
+    output_dir = check_output_dir()
+
+    # Pivotear el DataFrame para obtener una matriz de valores
+    pivot_table = dataframe.pivot_table(index=y_col, columns=x_col, values=z_col, aggfunc='mean')
+
+    # Crear el heatmap
+    sns.set(style="whitegrid")
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(pivot_table, annot=True, cmap="coolwarm", fmt=".1f")
+
+    # Título y etiquetas
+    plt.title(f"Heatmap de {z_col} con {x_col} y {y_col}")
+    plt.xlabel(x_col)
+    plt.ylabel(y_col)
+
+    # Guardar la imagen
+    plt.savefig(f"{output_dir}/heatmap_{x_col}_{y_col}_{z_col}.png")
+    plt.close()
