@@ -10,14 +10,6 @@ def read_diabetes(path):
     return pd.read_csv(path, delimiter='\t') # Agregamos el delimitador para que haga el split correctamente
 """
     
-def read_inegi(path):
-    try:
-        # Lee el archivo y lo retorna
-        dataframe = pd.read_csv(path)
-        return dataframe
-    except FileNotFoundError as e:
-        print(f"El archivo {path} no se encuentra en la ruta especificada")
-        raise e
-    except Exception as e:
-        print(f"Error al leer el archivo {path}")
-        raise e
+def read_inegi_dataset(path):
+    data =pd.read_csv(path, sep=(","))
+    return data

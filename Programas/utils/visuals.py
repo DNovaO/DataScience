@@ -2,10 +2,8 @@
 # 2. Crear una funcion, la cual genere un folder para guardar las imcolumnnes generadas en png
 
 import seaborn as sns
-#import utils.processing as proc
 import matplotlib.pyplot as plt
-#import plotly.graph_objects as go
-#import plotly.express as px
+import plotly.express as px
 import numpy as np
 import pandas as pd
 import os
@@ -72,17 +70,19 @@ def save_all_correlations_one_image(dataframe):
 """
 # SEGUNDA PARTE --> INEGI
 # Crear la funcion con seaborn para generar un heatmap
-# Crear la función con seaborn para generar un heatmap
+
 def save_heatmap(dataframe, x_col, y_col, z_col):
     output_dir = check_output_dir()
 
-    # Pivotear el DataFrame para obtener una matriz de valores
+    # Pivotar el DataFrame para obtener una matriz de valores
     pivot_table = dataframe.pivot_table(index=y_col, columns=x_col, values=z_col, aggfunc='mean')
 
     # Crear el heatmap
-    sns.set(style="whitegrid")
     plt.figure(figsize=(10, 8))
-    sns.heatmap(pivot_table, annot=True, cmap="coolwarm", fmt=".1f")
+    sns.set(style="whitegrid")
+    
+    # Generamos el heatmap
+    sns.heatmap(pivot_table, annot=True, fmt=".1f", cmap="coolwarm", linewidths=0.5)
 
     # Título y etiquetas
     plt.title(f"Heatmap de {z_col} con {x_col} y {y_col}")
