@@ -1,11 +1,10 @@
 # 1. Funcion para genererar y guardar las visualizaciones (Histogramas(dataframe,"column"))
 # 2. Crear una funcion, la cual genere un folder para guardar las imcolumnnes generadas en png
 
-import seaborn as sns
 import matplotlib.pyplot as plt
-import plotly.express as px
-import numpy as np
+import seaborn as sns
 import pandas as pd
+import numpy as np
 import os
 
 def check_output_dir():
@@ -18,7 +17,6 @@ def check_output_dir():
         os.makedirs(output_dir)
     return output_dir
 
-"""
 # Crear la funcion con seaborn para generar un histograma por pares de columna
 def save_histogram(dataframe, column):
     output_dir = check_output_dir()
@@ -67,28 +65,3 @@ def save_all_correlations_one_image(dataframe):
     plt.savefig(f"{output_dir}/ALL_histograms.png")
     plt.close()
     pass
-"""
-# SEGUNDA PARTE --> INEGI
-# Crear la funcion con seaborn para generar un heatmap
-
-def save_heatmap(dataframe, x_col, y_col, z_col):
-    output_dir = check_output_dir()
-
-    # Pivotar el DataFrame para obtener una matriz de valores
-    pivot_table = dataframe.pivot_table(index=y_col, columns=x_col, values=z_col, aggfunc='mean')
-
-    # Crear el heatmap
-    plt.figure(figsize=(10, 8))
-    sns.set(style="whitegrid")
-    
-    # Generamos el heatmap
-    sns.heatmap(pivot_table, annot=True, fmt=".1f", cmap="coolwarm", linewidths=0.5)
-
-    # Título y etiquetas
-    plt.title(f"Heatmap de {z_col} con {x_col} y {y_col}")
-    plt.xlabel(x_col)
-    plt.ylabel(y_col)
-
-    # Guardar la imagen
-    plt.savefig(f"{output_dir}/heatmap_{x_col}_{y_col}_{z_col}.png")
-    plt.close()
