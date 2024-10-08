@@ -1,11 +1,12 @@
 # Ciencia de Datos
 # Modelo entrenamiento y testing
+# Regresión Lineal
 
 import process as proc
 
 # Ruta al archivo CSV
-file_path = r'C:\Users\bryan\Documents\ITQ\Semestre 8\Ciencia de Datos\DS env\Testing\data\diabetesnorm.csv'
-
+# file_path = r'C:\Users\bryan\Documents\ITQ\Semestre 8\Ciencia de Datos\DS env\Testing\data\diabetesnorm.csv'
+file_path = r'C:\Users\Bry\Documents\ITQ\Semestre 8\Ciencia de Datos\Data-Science\Testing\data\diabetesnorm.csv'
 # Cargar el dataset
 dataset = proc.load_diabetes_data(file_path)
 
