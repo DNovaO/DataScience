@@ -4,10 +4,10 @@ from constants import img_height, img_width, num_classes
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 
 # Directorios del dataset
-img_dir_train = 'D:/FloodNet-Supervised_v1.0/train/train-org-img'
-mask_dir_train = 'D:/ColorMasks-FloodNetv1.0/ColorMasks-TrainSet'
-img_dir_val = 'D:/FloodNet-Supervised_v1.0/val/val-org-img'
-mask_dir_val = 'D:/ColorMasks-FloodNetv1.0/ColorMasks-ValSet'
+img_dir_train = 'C:/Users/Oscar Garcia/Documents/Materias/ciencia de datos/FloodNet-Supervised_v1.0/train/train-org-img'
+mask_dir_train = 'C:/Users/Oscar Garcia/Documents/Materias/ciencia de datos/ColorMasks-FloodNetv1.0/ColorMasks-TrainSet'
+img_dir_val = 'C:/Users/Oscar Garcia/Documents/Materias/ciencia de datos/FloodNet-Supervised_v1.0/val/val-org-img'
+mask_dir_val = 'C:/Users/Oscar Garcia/Documents/Materias/ciencia de datos/ColorMasks-FloodNetv1.0/ColorMasks-ValSet'
 
 # Cargar datos
 x_train, y_train = load_data(img_dir_train, mask_dir_train, img_height, img_width, num_classes)
@@ -25,8 +25,8 @@ early_stopping = EarlyStopping(patience=10, monitor='val_loss', mode='min', rest
 history = model.fit(
     x_train, y_train,
     validation_data=(x_val, y_val),
-    epochs=10,
-    batch_size=32,
+    epochs=100,
+    batch_size=64,
     callbacks=[checkpoint, early_stopping]
 )
 
