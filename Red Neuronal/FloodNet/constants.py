@@ -3,9 +3,7 @@
 # Dimensiones de las imágenes
 img_height = 128
 img_width = 128
-
-# Número de clases en el dataset FloodNet (ajusta según corresponda)
-num_classes = 9
+num_classes = 9 # Número de clases
 
 # Paleta de colores para las clases
 color_map = {

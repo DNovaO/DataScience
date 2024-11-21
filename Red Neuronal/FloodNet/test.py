@@ -7,7 +7,7 @@ from constants import img_height, img_width, num_classes, color_map
 from visualize import visualize_results
 
 # Cargar datos de prueba
-x_test, y_test = load_data('C:/Users/Oscar Garcia/Documents/Materias/ciencia de datos/FloodNet-Supervised_v1.0/test/test-org-img', 'C:/Users/Oscar Garcia/Documents/Materias/ciencia de datos/FloodNet-Supervised_v1.0/test/test-label-img', img_height, img_width, num_classes)
+x_test, y_test = load_data('D:/FloodNet-Supervised_v1.0/test/test-org-img', 'D:/FloodNet-Supervised_v1.0/test/test-label-img', img_height, img_width, num_classes)
 
 # Cargar modelo entrenado
 model = load_model('floodnet_model_best.keras')

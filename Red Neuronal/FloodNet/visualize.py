@@ -1,14 +1,7 @@
+# visualize.py
 import matplotlib.pyplot as plt
 import numpy as np
-
-
-color_map = {
-    0: [0, 0, 0],      
-    1: [255, 0, 0],    
-    2: [0, 255, 0],    
-    3: [0, 0, 255],    
-  
-}
+from constants import color_map
 
 def decode_mask(mask):
     """
@@ -27,16 +20,6 @@ def visualize_results(images, masks, predictions, num_samples=5):
     Visualiza imágenes originales, máscaras reales y predicciones.
     """
     for i in range(num_samples):
-        
-        if len(predictions[i].shape) == 3:  
-            predictions[i] = np.argmax(predictions[i], axis=-1)
-
-        # Verificar dimensiones y valores únicos
-        print(f"Imagen {i+1}:")
-        print(f"Dimensiones - Imagen: {images[i].shape}, Máscara: {masks[i].shape}, Predicción: {predictions[i].shape}")
-        print(f"Valores únicos en Máscara: {np.unique(masks[i])}")
-        print(f"Valores únicos en Predicción: {np.unique(predictions[i])}")
-
         plt.figure(figsize=(15, 5))
 
         # Imagen original

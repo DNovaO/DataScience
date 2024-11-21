@@ -1,43 +1,74 @@
 import os
-import cv2
+import tensorflow as tf
 import numpy as np
 from tensorflow.keras.utils import to_categorical
 
-def load_data(img_dir, mask_dir, img_height, img_width, num_classes):
+def remap_mask_values(mask):
+    # Create a mapping of unique values to 0-(num_classes-1)
+    unique_values = np.unique(mask)
+    value_map = {val: i for i, val in enumerate(unique_values)}
+    
+    # Remap the mask values
+    for old_value, new_value in value_map.items():
+        mask[mask == old_value] = new_value
+    
+    return mask
+
+def preprocess_image(image, mask, target_size=(128, 128)):
+    # Redimensionar imagen
+    image = tf.image.resize(image, target_size, method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+    # Redimensionar máscara
+    mask = tf.image.resize(mask, target_size, method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+    return image, mask
+
+def load_data(img_dir, mask_dir, img_height, img_width):
+    # Listas para almacenar imágenes y máscaras
     images = []
     masks = []
-    for img_file in os.listdir(img_dir):
+
+    # Obtener listas de archivos de imágenes y máscaras
+    image_files = sorted([f for f in os.listdir(img_dir) if f.endswith('.jpg')])
+    mask_files = sorted([f for f in os.listdir(mask_dir) if f.endswith('.png')])
+
+    # Verificar que el número de imágenes y máscaras coincida
+    if len(image_files) != len(mask_files):
+        raise ValueError("El número de imágenes y máscaras no coincide.")
+
+    for img_file, mask_file in zip(image_files, mask_files):
+        # Cargar imagen
         img_path = os.path.join(img_dir, img_file)
-        mask_file = img_file.replace('.jpg', '_lab.png')
+        img = tf.io.read_file(img_path)
+        img = tf.image.decode_image(img, channels=3)
+        img = tf.image.convert_image_dtype(img, tf.float32)  # Normalizar a [0,1]
+
+        # Cargar máscara
         mask_path = os.path.join(mask_dir, mask_file)
+        mask = tf.io.read_file(mask_path)
+        mask = tf.image.decode_image(mask, channels=1)
+        mask = tf.image.convert_image_dtype(mask, tf.uint8)  # Asegurar que la máscara sea entera
 
-        if not os.path.exists(img_path) or not os.path.exists(mask_path):
-            print(f"Advertencia: {img_path} o {mask_path} no existe.")
-            continue
-
-        img = cv2.imread(img_path)
-        mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
-
-        if img is None or mask is None:
-            print(f"Advertencia: No se pudo leer {img_path} o {mask_path}.")
-            continue
-
-        img = cv2.resize(img, (img_width, img_height))
-        mask = cv2.resize(mask, (img_width, img_height), interpolation=cv2.INTER_NEAREST)
+        # Preprocesar imagen y máscara
+        img, mask = preprocess_image(img, mask, target_size=(img_height, img_width))
 
         images.append(img)
         masks.append(mask)
 
-    images = np.array(images, dtype=np.float32) / 255.0
-    masks = np.array(masks, dtype=np.int32)
+    # Convertir listas a arrays de NumPy
+    images = np.array(images, dtype=np.float32)
+    masks = np.array(masks, dtype=np.uint8)
 
-    # Verificar valores únicos en las máscaras
-    print("Valores únicos en las máscaras antes de clip:", np.unique(masks))
-    
-    # Limitar valores al rango permitido
-    masks = np.clip(masks, 0, num_classes - 1)
+    # Remap mask values
+    masks = np.array([remap_mask_values(mask) for mask in masks])
 
-    if num_classes > 1:
-        masks = to_categorical(masks, num_classes=num_classes)
+    # Verify unique values after remapping
+    unique_values = np.unique(masks)
+    print(f"Valores únicos en las máscaras después de remapear: {unique_values}")
 
-    return images, masks
+    # Ensure num_classes matches the actual number of classes
+    num_classes = len(unique_values)
+    print(f"Número de clases ajustado a: {num_classes}")
+
+    # Convert masks to one-hot encoding
+    masks = to_categorical(masks, num_classes=num_classes)
+
+    return images, masks, num_classes
